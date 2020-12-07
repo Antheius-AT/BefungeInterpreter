@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="LanguageCommands\" />
+    <Folder Include="AdditionalComponents\" />
+    <Folder Include="LanguageCommands\InputCommands\" />
+    <Folder Include="LanguageCommands\DecisionMakingCommands\" />
+    <Folder Include="LanguageCommands\CalculationCommands\" />
+    <Folder Include="LanguageCommands\OutputCommands\" />
   </ItemGroup>
 
 </Project>
