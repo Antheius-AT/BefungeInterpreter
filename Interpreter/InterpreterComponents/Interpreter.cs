@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
 
 namespace Interpreter
@@ -41,7 +42,14 @@ namespace Interpreter
 
         public void RunCode()
         {
-            throw new NotImplementedException();
+            ICommand currentCommand;
+
+            while (this.isRunning)
+            {
+                currentCommand = this.CommandParser.ParseCommand(this.Torus.TorusContent[this.Pointer.CurrentPosition.X, this.Pointer.CurrentPosition.Y]);
+                currentCommand.Execute();
+                this.Pointer.Move();
+            }
         }
 
         private void ExitProgramCallback()

@@ -20,7 +20,7 @@ namespace Interpreter
         {
             this.Width = width;
             this.Height = height;
-            this.TorusContent = new string[width, height];
+            this.TorusContent = new char[width, height];
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Interpreter
         /// <summary>
         /// Gets the torus content.
         /// </summary>
-        public string[,] TorusContent
+        public char[,] TorusContent
         {
             get;
             private set;
