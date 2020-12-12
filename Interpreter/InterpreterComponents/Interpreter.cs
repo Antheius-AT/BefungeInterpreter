@@ -2,34 +2,39 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Interpreter.Exceptions;
 using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
+using Microsoft.Extensions.Hosting;
 
 namespace Interpreter
 {
     /// <summary>
     /// The main class of this application, the interpreter, combines all of the various elements and coordinates them.
     /// </summary>
-    public class Interpreter
+    public class Interpreter : IHostedService
     {
         private bool isRunning;
-        public readonly Stack<long> befungeStack;
+        private readonly Stack<long> befungeStack;
 
-        public Interpreter()
+        public Interpreter(string code)
         {
             this.Torus = new Torus();
             this.Pointer = new ProgramCounter();
             this.isRunning = true;
             this.CommandParser = new DefaultCommandParser();
+            this.PrepareTorus(code);
         }
 
-        public Interpreter(ICommandParser commandParser)
+        public Interpreter(ICommandParser commandParser, string code)
         {
             this.Torus = new Torus();
             this.Pointer = new ProgramCounter();
             this.isRunning = true;
             this.CommandParser = commandParser;
+            this.PrepareTorus(code);
         }
 
         public Torus Torus
@@ -111,6 +116,17 @@ namespace Interpreter
         private void ExitProgramCallback()
         {
             this.isRunning = false;
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            // Gets called when host.run is called.
+            throw new NotImplementedException();
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
