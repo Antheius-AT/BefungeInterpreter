@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Interpreter": {
+      "commandName": "Project",
+      "commandLineArgs": "--noninteractive \"fseff f f f f es ff f fsef sef sefsefse\""
+    }
+  }
+}

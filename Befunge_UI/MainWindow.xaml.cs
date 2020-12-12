@@ -24,31 +24,5 @@ namespace Befunge_UI
         {
             InitializeComponent();
         }
-
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (this.codeArea.Text.Length % 80 == 0)
-            {
-                this.codeArea.Text += "\n";
-                this.codeArea.SelectionStart = this.codeArea.Text.Length - 1;
-            }
-        }
-
-        private void codeArea_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (this.codeArea.Text.Length != 0 && this.codeArea.Text.Length % 81 == 0)
-            {
-                for (int i = 1; i < this.codeArea.Text.Length; i++)
-                {
-                    if (i % 80 == 0)
-                    {
-                        this.codeArea.TextChanged -= this.codeArea_TextChanged;
-                        this.codeArea.Text += "\n";
-                        this.codeArea.SelectionStart = this.codeArea.Text.Length - 1;
-                        this.codeArea.TextChanged += this.codeArea_TextChanged;
-                    }
-                }
-            }
-        }
     }
 }

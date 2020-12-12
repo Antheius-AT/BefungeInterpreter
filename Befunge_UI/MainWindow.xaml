@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Befunge_UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="700" Width="1000">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Width" Value="60"/>
+            <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -56,11 +56,14 @@
         </Grid.RowDefinitions>
 
         <Border BorderBrush="Black" BorderThickness="2">
-            <TextBox Name="codeArea" TextChanged="codeArea_TextChanged" Background="LightBlue" AcceptsReturn="True" Text="{Binding ProgramContent}" TextWrapping="Wrap" FontSize="20" FontFamily="Courier New"/>
+            <TextBox Background="LightBlue" AcceptsReturn="True" Text="{Binding ProgramContent}" TextWrapping="Wrap" FontSize="20" FontFamily="Courier New" Width="970" MaxWidth="970" MaxLines="25" MaxLength="2000" MaxHeight="700"/>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
             <Button Content="Load" Command="{Binding LoadInputCommand}"/>
             <Button Content="Run" Command="{Binding RunCodeCommand}"/>
+            <Button Content="Specify Interpreter" Command="{Binding SpecifyInterpreterCommand}"/>
+            <TextBlock Margin="10" Text="Pfad zum Interpreter: "/>
+            <TextBlock Margin="10" Text="{Binding PathToInterpreter}"/>
         </StackPanel>
     </Grid>
 </Window>
