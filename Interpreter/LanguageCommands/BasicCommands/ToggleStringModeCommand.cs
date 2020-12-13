@@ -1,22 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Interpreter.Interfaces;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="ToggleStringModeCommand.cs" company="FHWN">
+//     Copyright (c) FHWN. All rights reserved.
+// </copyright>
+// <author>Gregor Faiman</author>
+//-----------------------------------------------------------------------
 namespace Interpreter.LanguageCommands.BasicCommands
 {
+    using System;
+    using Interfaces;
+
+    /// <summary>
+    /// A command that toggles string mode.
+    /// </summary>
     public class ToggleStringModeCommand : ICommand
     {
-        private ICommandParser parser;
+        private Action action;
 
-        public ToggleStringModeCommand(ICommandParser parser)
+        public ToggleStringModeCommand(Action action)
         {
-            this.parser = parser;
+            this.action = action;
         }
 
         public void Execute()
         {
-            throw new NotImplementedException();
+            this.action.Invoke();
         }
     }
 }

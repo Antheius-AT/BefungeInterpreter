@@ -19,41 +19,46 @@ namespace Interpreter.InterpreterComponents
     using LanguageCommands.StackManipulationCommands;
     using LanguageCommands.MemoryManipulatingCommands;
 
+    /// <summary>
+    /// Represent the default command parser, which parses characters into commands.
+    /// </summary>
     public class DefaultCommandParser : ICommandParser
     {
-        private Dictionary<char, Type> charToCommandMap;
+        private Stack<long> stack;
+        private Dictionary<char, ICommand> charToCommandMap;
 
-        public DefaultCommandParser(ToggleStringModeCommand stringCommand)
+        public DefaultCommandParser(Stack<long> stack, ProgramCounter pointer, Random random, IOutputHandler outputHandler, IInputHandler inputHandler, Torus torus)
         {
-            this.charToCommandMap = new Dictionary<char, Type>()
+            this.stack = stack;
+            this.charToCommandMap = new Dictionary<char, ICommand>()
             {
-                {'+', typeof(AdditionCommand) },
-                {'-', typeof(SubtractionCommand) },
-                {'*', typeof(MultiplicationCommand) },
-                {'/', typeof(DivisionCommand) },
-                {'%', typeof(ModuloCommand) },
-                {'!', typeof(LogicalNotCommand) },
-                {'`', typeof(GreaterThanCommand) },
-                {'>', typeof(RightDirectionCommand) },
-                {'<', typeof(LeftDirectionCommand) },
-                {'^', typeof(UpDirectionCommand) },
-                {'v', typeof(DownDirectionCommand) },
-                {'?', typeof(RandomDirectionCommand) },
-                {'_', typeof(HorizontalConditionalCommand) },
-                {'|', typeof(VerticalConditionalCommand) },
-                {'"', typeof(ToggleStringModeCommand) },
-                {':', typeof(DuplicateTopValueCommand) },
-                {'\\', typeof(SwapTopValuesCommand) },
-                {'$', typeof(DiscardTopValueCommand) },
-                {'.', typeof(OutputIntegerCommand) },
-                {',', typeof(OutputCharacterCommand) },
-                {'#', typeof(BridgeCommand) },
-                {'g', typeof(RetrieveFromMemoryCommand) },
-                {'p', typeof(PutToMemoryCommand) },
-                {'&', typeof(GetIntegerInputCommand) },
-                {'~', typeof(GetCharacterInputCommand) },
-                {'@', typeof(EndExecutionCommand) },
-                {' ', typeof(NullCommand) }
+                {'+', new AdditionCommand(stack) },
+                {'-', new SubtractionCommand(stack) },
+                {'*', new MultiplicationCommand(stack) },
+                {'/', new DivisionCommand(stack) },
+                {'%', new ModuloCommand(stack) },
+                {'!', new LogicalNotCommand(stack) },
+                {'`', new GreaterThanCommand(stack) },
+                {'>', new RightDirectionCommand(pointer) },
+                {'<', new LeftDirectionCommand(pointer) },
+                {'^', new UpDirectionCommand(pointer) },
+                {'v', new DownDirectionCommand(pointer) },
+                {'?', new RandomDirectionCommand(pointer, random) },
+                {'_', new HorizontalConditionalCommand(stack, pointer) },
+                {'|', new VerticalConditionalCommand(stack, pointer) },
+                {'"', new ToggleStringModeCommand(this.ToggleStringMode) },
+                {':', new DuplicateTopValueCommand(stack) },
+                {'\\', new  SwapTopValuesCommand(stack) },
+                {'$', new DiscardTopValueCommand(stack) },
+                {'.', new OutputIntegerCommand(outputHandler, stack) },
+                {',', new OutputCharacterCommand(outputHandler, stack) },
+                {'#', new BridgeCommand(pointer) },
+                {'g', new RetrieveFromMemoryCommand(stack, torus) },
+                {'p', new PutToMemoryCommand(stack, torus) },
+                {'&', new GetIntegerInputCommand(stack, inputHandler) },
+                {'~', new GetCharacterInputCommand(stack, inputHandler) },
+                {'@', new EndExecutionCommand(pointer) },
+                {' ', new NullCommand() }
            };
         }
 
@@ -73,21 +78,30 @@ namespace Interpreter.InterpreterComponents
         /// <returns>Whether the specified character can be parsed.</returns>
         public bool CanParse(char character)
         {
-            if (this.IsStringmodeToggled)
+            if (this.IsStringmodeToggled || char.IsDigit(character))
                 return true;
 
             return this.charToCommandMap.ContainsKey(character);
         }
 
+        /// <summary>
+        /// Parses a character into a command.
+        /// </summary>
+        /// <param name="character">The character to be parsed.</param>
+        /// <returns>The parsed command.</returns>
         public ICommand Parse(char character)
         {
             if (!this.CanParse(character))
                 throw new ArgumentException(nameof(character), "Character could not be parsed.");
 
             ICommand command;
-            Type commandType = this.charToCommandMap[character];
 
-            command = (ICommand)Activator.CreateInstance(commandType);
+            if (char.IsDigit(character))
+                command = new PushToStackCommand(long.Parse(character.ToString()), this.stack);
+            else if (this.IsStringmodeToggled)
+                command = new PushToStackCommand((long)character, this.stack);
+            else
+                command = this.charToCommandMap[character];
 
             return command;
         }

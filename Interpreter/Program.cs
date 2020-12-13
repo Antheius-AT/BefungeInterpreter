@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Interpreter.AdditionalComponents;
 using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
 using Interpreter.LanguageCommands.BasicCommands;
@@ -19,7 +20,9 @@ namespace Interpreter
             else if (args.Length == 2 && args[0].ToLower() == "--noninteractive")
             {
                 var host = CreateHostBuilder(args).Build();
-                host.Run();
+                var interpreter = host.Services.GetRequiredService<Interpreter>();
+
+                interpreter.Start();
             }
             else
                 throw new ArgumentException(nameof(args), "Invalid argument specified");
@@ -30,13 +33,20 @@ namespace Interpreter
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                 {
+                    // Could think about injecting these as abstract interfaces to increase modularity.
+                    // However Im keeping this as something to think about at a later stage.
+                    services.AddSingleton<Torus>();
                     services.AddSingleton<Stack<long>>();
-                    services.AddTransient<ToggleStringModeCommand>();
-                    services.AddSingleton<ICommandParser, DefaultCommandParser>();
-                    services.AddHostedService<Interpreter>(service =>
+                    services.AddSingleton<Random>();
+                    services.AddSingleton<ProgramCounter>();
+                    services.AddSingleton<IInputHandler, ConsoleInputHandler>();
+                    services.AddSingleton<IOutputHandler, ConsoleOutputHandler>();
+                    services.AddTransient<ExecutableCodeContainer>(factory =>
                     {
-                        return new Interpreter(args[1], new DefaultCommandParser());
+                        return new ExecutableCodeContainer(args[1]);
                     });
+                    services.AddSingleton<ICommandParser, DefaultCommandParser>();
+                    services.AddTransient<Interpreter>();
                 })
                 .ConfigureLogging(options =>
                 {

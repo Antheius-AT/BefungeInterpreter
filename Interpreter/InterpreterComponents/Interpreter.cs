@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Interpreter.AdditionalComponents;
 using Interpreter.Exceptions;
 using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
@@ -14,23 +15,23 @@ namespace Interpreter
     /// <summary>
     /// The main class of this application, the interpreter, combines all of the various elements and coordinates them.
     /// </summary>
-    public class Interpreter : IHostedService
+    public class Interpreter
     {
         private bool isRunning;
 
-        public Interpreter(string code, ICommandParser commandParser)
+        public Interpreter(Torus torus, ProgramCounter pointer, ExecutableCodeContainer codeContainer, ICommandParser commandParser)
         {
-            this.Torus = new Torus();
-            this.Pointer = new ProgramCounter();
+            this.Torus = torus;
+            this.Pointer = pointer;
             this.CommandParser = commandParser;
 
-            if (code == null)
-                throw new ArgumentNullException(nameof(code), "Code must not be null.");
+            if (codeContainer == null)
+                throw new ArgumentNullException(nameof(codeContainer), "Code must not be null.");
 
-            if (code.Length > this.Torus.Height * this.Torus.Width)
-                throw new ArgumentOutOfRangeException(nameof(code), $"Code characters exceeded the maximum amount of possible commands in the torus ({this.Torus.Height * this.Torus.Width})");
+            if (codeContainer.Code.Length > this.Torus.Height * this.Torus.Width)
+                throw new ArgumentOutOfRangeException(nameof(codeContainer), $"Code characters exceeded the maximum amount of possible commands in the torus ({this.Torus.Height * this.Torus.Width})");
 
-            this.PrepareTorus(code);
+            this.PrepareTorus(codeContainer.Code);
         }
 
         public Torus Torus
@@ -51,6 +52,12 @@ namespace Interpreter
             private set;
         }
 
+        public void Start()
+        {
+            this.isRunning = true;
+            this.RunCode();
+        }
+
         /// <summary>
         /// Runs a piece of Befunge-93 code.
         /// </summary>
@@ -61,7 +68,7 @@ namespace Interpreter
         /// <exception cref="ArgumentOutOfRangeException">
         /// Is thrown if the characters in the code exceed the limit the torus can handle.
         /// </exception>
-        public void RunCode()
+        private void RunCode()
         {
             ICommand currentCommand;
             char current;
@@ -76,6 +83,7 @@ namespace Interpreter
                 currentCommand = this.CommandParser.Parse(current);
                 currentCommand.Execute();
                 this.Pointer.Move();
+                this.isRunning = !this.Pointer.Terminated;
             }
         }
 
@@ -99,25 +107,6 @@ namespace Interpreter
                     row++;
                 }
             }
-        }
-
-        private void ExitProgramCallback()
-        {
-            this.isRunning = false;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            // Gets called when host.run is called.
-            this.isRunning = true;
-            this.RunCode();
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            this.isRunning = false;
-            return Task.CompletedTask;
         }
     }
 }

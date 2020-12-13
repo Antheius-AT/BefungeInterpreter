@@ -1,25 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Interpreter.Interfaces;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="EndExecutionCommand.cs" company="FHWN">
+//     Copyright (c) FHWN. All rights reserved.
+// </copyright>
+// <author>Gregor Faiman</author>
+//-----------------------------------------------------------------------
 namespace Interpreter.LanguageCommands.BasicCommands
 {
+    using Interfaces;
+
+    /// <summary>
+    /// Represent a command that ends execution of the interpreter.
+    /// </summary>
     public class EndExecutionCommand : ICommand
     {
-        private Action callBack;
+        private ProgramCounter pointer;
 
-        public EndExecutionCommand(Action callBack)
+        public EndExecutionCommand(ProgramCounter pointer)
         {
-            if (callBack != null)
-                throw new ArgumentNullException(nameof(callBack), "Callback must not be null.");
-
-            this.callBack = callBack;
+            this.pointer = pointer;
         }
 
         public void Execute()
         {
-            this.callBack.Invoke();
+            this.pointer.EndExecution();
         }
     }
 }

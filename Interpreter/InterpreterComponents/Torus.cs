@@ -9,8 +9,6 @@ namespace Interpreter
     /// </summary>
     public class Torus
     {
-        private string[,] torusContent;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Torus"/> class.
         /// </summary>
@@ -21,6 +19,14 @@ namespace Interpreter
             this.Width = width;
             this.Height = height;
             this.TorusContent = new char[width, height];
+
+            for (int i = 0; i < this.TorusContent.GetLength(1); i++)
+            {
+                for (int j = 0; j < this.TorusContent.GetLength(0); j++)
+                {
+                    this.TorusContent[j, i] = ' ';
+                }
+            }
         }
 
         /// <summary>

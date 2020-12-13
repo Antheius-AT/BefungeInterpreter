@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Interpreter.Interfaces;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="PushToStackCommand.cs" company="FHWN">
+//     Copyright (c) FHWN. All rights reserved.
+// </copyright>
+// <author>Gregor Faiman</author>
+//-----------------------------------------------------------------------
 namespace Interpreter.LanguageCommands.BasicCommands
 {
+    using System;
+    using System.Collections.Generic;
+    using Interfaces;
+
     public class PushToStackCommand : ICommand
     {
         private long data;
@@ -21,7 +26,7 @@ namespace Interpreter.LanguageCommands.BasicCommands
 
         public void Execute()
         {
-            throw new NotImplementedException();
+            this.stack.Push(this.data);
         }
     }
 }

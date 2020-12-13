@@ -1,11 +1,18 @@
-﻿using Interpreter.AdditionalComponents;
-using Interpreter.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="ProgramCounter.cs" company="FHWN">
+//     Copyright (c) FHWN. All rights reserved.
+// </copyright>
+// <author>Gregor Faiman</author>
+//-----------------------------------------------------------------------
 namespace Interpreter
 {
+    using System;
+    using AdditionalComponents;
+    using Enumerations;
+
+    /// <summary>
+    /// Represents the program counter, pointing to the current instruction.
+    /// </summary>
     public class ProgramCounter
     {
         public ProgramCounter()
@@ -13,6 +20,34 @@ namespace Interpreter
             this.CurrentPosition = new Position(0, 0);
             this.CurrentPointerDirection = Direction.Right;
         }
+
+        /// <summary>
+        /// Gets or sets the direction in which the pointer is currently traveling.
+        /// </summary>
+        public Direction CurrentPointerDirection
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the current index of the program counter.
+        /// </summary>
+        public Position CurrentPosition
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the program counter terminated and the program ended.
+        /// </summary>
+        public bool Terminated
+        {
+            get;
+            private set;
+        }
+
 
         /// <summary>
         /// Advances the program counter by one into the specified direction.
@@ -45,21 +80,11 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Gets or sets the direction in which the pointer is currently traveling.
+        /// Ends program execution.
         /// </summary>
-        public Direction CurrentPointerDirection
+        public void EndExecution()
         {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets the current index of the program counter.
-        /// </summary>
-        public Position CurrentPosition
-        {
-            get;
-            private set;
+            this.Terminated = true;
         }
     }
 }
