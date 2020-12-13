@@ -17,23 +17,19 @@ namespace Interpreter
     public class Interpreter : IHostedService
     {
         private bool isRunning;
-        private readonly Stack<long> befungeStack;
 
-        public Interpreter(string code)
+        public Interpreter(string code, ICommandParser commandParser)
         {
             this.Torus = new Torus();
             this.Pointer = new ProgramCounter();
-            this.isRunning = true;
-            this.CommandParser = new DefaultCommandParser();
-            this.PrepareTorus(code);
-        }
-
-        public Interpreter(ICommandParser commandParser, string code)
-        {
-            this.Torus = new Torus();
-            this.Pointer = new ProgramCounter();
-            this.isRunning = true;
             this.CommandParser = commandParser;
+
+            if (code == null)
+                throw new ArgumentNullException(nameof(code), "Code must not be null.");
+
+            if (code.Length > this.Torus.Height * this.Torus.Width)
+                throw new ArgumentOutOfRangeException(nameof(code), $"Code characters exceeded the maximum amount of possible commands in the torus ({this.Torus.Height * this.Torus.Width})");
+
             this.PrepareTorus(code);
         }
 
@@ -65,18 +61,10 @@ namespace Interpreter
         /// <exception cref="ArgumentOutOfRangeException">
         /// Is thrown if the characters in the code exceed the limit the torus can handle.
         /// </exception>
-        public void RunCode(string code)
+        public void RunCode()
         {
-            if (code == null)
-                throw new ArgumentNullException(nameof(code), "Code must not be null.");
-
-            if (code.Length > this.Torus.Height * this.Torus.Width)
-                throw new ArgumentOutOfRangeException(nameof(code), $"Code characters exceeded the maximum amount of possible commands in the torus ({this.Torus.Height * this.Torus.Width})");
-           
             ICommand currentCommand;
             char current;
-
-            this.PrepareTorus(code);
 
             while (this.isRunning)
             {
@@ -121,12 +109,15 @@ namespace Interpreter
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // Gets called when host.run is called.
-            throw new NotImplementedException();
+            this.isRunning = true;
+            this.RunCode();
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            this.isRunning = false;
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Interpreter.Interfaces;
+using Interpreter.InterpreterComponents;
+using Interpreter.LanguageCommands.BasicCommands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,9 +31,11 @@ namespace Interpreter
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<Stack<long>>();
+                    services.AddTransient<ToggleStringModeCommand>();
+                    services.AddSingleton<ICommandParser, DefaultCommandParser>();
                     services.AddHostedService<Interpreter>(service =>
                     {
-                        return new Interpreter(args[1]);
+                        return new Interpreter(args[1], new DefaultCommandParser());
                     });
                 })
                 .ConfigureLogging(options =>

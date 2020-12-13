@@ -23,7 +23,7 @@ namespace Interpreter.InterpreterComponents
     {
         private Dictionary<char, Type> charToCommandMap;
 
-        public DefaultCommandParser()
+        public DefaultCommandParser(ToggleStringModeCommand stringCommand)
         {
             this.charToCommandMap = new Dictionary<char, Type>()
             {
@@ -53,6 +53,7 @@ namespace Interpreter.InterpreterComponents
                 {'&', typeof(GetIntegerInputCommand) },
                 {'~', typeof(GetCharacterInputCommand) },
                 {'@', typeof(EndExecutionCommand) },
+                {' ', typeof(NullCommand) }
            };
         }
 
@@ -72,6 +73,9 @@ namespace Interpreter.InterpreterComponents
         /// <returns>Whether the specified character can be parsed.</returns>
         public bool CanParse(char character)
         {
+            if (this.IsStringmodeToggled)
+                return true;
+
             return this.charToCommandMap.ContainsKey(character);
         }
 

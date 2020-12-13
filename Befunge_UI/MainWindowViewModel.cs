@@ -71,6 +71,7 @@ namespace Befunge_UI
             {
                 return new RelayCommand(async p =>
                 {
+                    //var testInfo = new ProcessStartInfo("CMD.exe", $"\"{this.path} --noninteractive\"");
                     var info = new ProcessStartInfo(this.path, $"--noninteractive \"{this.ProgramContent}\"");
                     info.UseShellExecute = true;
                     info.ErrorDialog = true;
