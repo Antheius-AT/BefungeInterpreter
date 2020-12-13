@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Interpreter.AdditionalComponents;
 using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
@@ -43,7 +44,7 @@ namespace Interpreter
                     services.AddSingleton<IOutputHandler, ConsoleOutputHandler>();
                     services.AddTransient<ExecutableCodeContainer>(factory =>
                     {
-                        return new ExecutableCodeContainer(args[1]);
+                        return new ExecutableCodeContainer(File.ReadAllText("input.txt"));
                     });
                     services.AddSingleton<ICommandParser, DefaultCommandParser>();
                     services.AddTransient<Interpreter>();

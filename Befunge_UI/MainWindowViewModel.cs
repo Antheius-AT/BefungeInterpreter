@@ -16,6 +16,7 @@ namespace Befunge_UI
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private string programContent;
         private string path;
 
         public MainWindowViewModel()
@@ -25,8 +26,24 @@ namespace Befunge_UI
 
         public string ProgramContent
         {
-            get;
-            set;
+            get
+            {
+                return this.programContent;
+            }
+
+            set
+            {
+                string transformed = value;
+
+                var indexes = transformed.AllIndexesOf('"');
+
+                for (int i = 0; i < indexes.Count; i++)
+                {
+                    transformed = transformed.Insert(indexes[i] + i, "\\");
+                }
+
+                this.programContent = transformed;
+            }
         }
 
         public ICommand LoadInputCommand
@@ -72,7 +89,9 @@ namespace Befunge_UI
                 return new RelayCommand(async p =>
                 {
                     //var testInfo = new ProcessStartInfo("CMD.exe", $"\"{this.path} --noninteractive\"");
-                    var info = new ProcessStartInfo(this.path, $"--noninteractive \"{this.ProgramContent}\"");
+                    string argumentString = $"--noninteractive \"{this.ProgramContent}\"";
+                    File.WriteAllText("test.txt", this.ProgramContent);
+                    var info = new ProcessStartInfo(this.path, argumentString);
                     info.UseShellExecute = true;
                     info.ErrorDialog = true;
                     info.CreateNoWindow = true;

@@ -58,7 +58,9 @@ namespace Interpreter.InterpreterComponents
                 {'&', new GetIntegerInputCommand(stack, inputHandler) },
                 {'~', new GetCharacterInputCommand(stack, inputHandler) },
                 {'@', new EndExecutionCommand(pointer) },
-                {' ', new NullCommand() }
+                {' ', new NullCommand() },
+                {'\0', new NullCommand() },
+                {'\r', new NullCommand() }
            };
         }
 
@@ -81,6 +83,9 @@ namespace Interpreter.InterpreterComponents
             if (this.IsStringmodeToggled || char.IsDigit(character))
                 return true;
 
+            if (character.ToString() == @"\")
+                character = '\\';
+
             return this.charToCommandMap.ContainsKey(character);
         }
 
@@ -98,7 +103,7 @@ namespace Interpreter.InterpreterComponents
 
             if (char.IsDigit(character))
                 command = new PushToStackCommand(long.Parse(character.ToString()), this.stack);
-            else if (this.IsStringmodeToggled)
+            else if (this.IsStringmodeToggled && character != '"')
                 command = new PushToStackCommand((long)character, this.stack);
             else
                 command = this.charToCommandMap[character];
