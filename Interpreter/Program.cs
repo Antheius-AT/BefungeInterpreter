@@ -21,7 +21,7 @@ namespace Interpreter
             else if (args.Length == 2 && args[0].ToLower() == "--noninteractive")
             {
                 var host = CreateHostBuilder(args).Build();
-                var interpreter = host.Services.GetRequiredService<Interpreter>();
+                var interpreter = host.Services.GetRequiredService<BefungeInterpreter>();
 
                 interpreter.Start();
             }
@@ -47,7 +47,7 @@ namespace Interpreter
                         return new ExecutableCodeContainer(File.ReadAllText("input.txt"));
                     });
                     services.AddSingleton<ICommandParser, DefaultCommandParser>();
-                    services.AddTransient<Interpreter>();
+                    services.AddTransient<BefungeInterpreter>();
                 })
                 .ConfigureLogging(options =>
                 {

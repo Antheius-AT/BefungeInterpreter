@@ -9,17 +9,18 @@ using Interpreter.Exceptions;
 using Interpreter.Interfaces;
 using Interpreter.InterpreterComponents;
 using Microsoft.Extensions.Hosting;
+[assembly:InternalsVisibleTo("Interpreter_Tests")]
 
 namespace Interpreter
 {
     /// <summary>
     /// The main class of this application, the interpreter, combines all of the various elements and coordinates them.
     /// </summary>
-    public class Interpreter
+    public class BefungeInterpreter
     {
         private bool isRunning;
 
-        public Interpreter(Torus torus, ProgramCounter pointer, ExecutableCodeContainer codeContainer, ICommandParser commandParser)
+        public BefungeInterpreter(Torus torus, ProgramCounter pointer, ExecutableCodeContainer codeContainer, ICommandParser commandParser)
         {
             this.Torus = torus;
             this.Pointer = pointer;
@@ -91,7 +92,7 @@ namespace Interpreter
         /// Prepares the torus by writing the code into the 80x25 array.
         /// </summary>
         /// <param name="code">The code to write to the torus.</param>
-        private void PrepareTorus(string code)
+        internal void PrepareTorus(string code)
         {
             int row = 0;
             int column = 0;
@@ -102,13 +103,15 @@ namespace Interpreter
             {
                 // Only write current item into torus if it is not a new line feed.
                 this.Torus.TorusContent[column, row] = item == '\n' ? ' ' : item;
-                column++;
 
                 if (column == this.Torus.Width - 1 || item == '\n')
                 {
                     column = 0;
                     row++;
+                    continue;
                 }
+
+                column++;
             }
         }
     }
