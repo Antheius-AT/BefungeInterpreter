@@ -24,13 +24,13 @@ namespace Interpreter.LanguageCommands.CalculationCommands
 
         public void Execute()
         {
-            if (this.stack.Count < 2)
-                throw new CommandExecutionFailedException("Execution of multiplication command failed because too few elements where on stack.");
+            long first;
+            long second;
 
-            var first = this.stack.Pop();
-            var second = this.stack.Pop();
+            this.stack.TryPop(out first);
+            this.stack.TryPop(out second);
 
-            this.stack.Push(first * second);
+            this.stack.Push(second * first);
         }
     }
 }

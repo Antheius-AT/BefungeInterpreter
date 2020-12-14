@@ -29,8 +29,8 @@ namespace Interpreter.LanguageCommands.StackManipulationCommands
             this.stack.TryPop(out first);
             this.stack.TryPop(out second);
 
-            this.stack.Push(second);
             this.stack.Push(first);
+            this.stack.Push(second);
         }
     }
 }

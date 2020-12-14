@@ -14,7 +14,15 @@ namespace Interpreter.Interfaces
         /// <summary>
         /// Acquires input from the user.
         /// </summary>
+        /// <param name="promptMessage">The prompt message displayed to the user.</param>
         /// <returns>The acquired user input.</returns>
-        char AcquireInput(string promptMessage);
+        char AcquireCharacterInput(string promptMessage);
+
+        /// <summary>
+        /// Acquires numeric input from the user.
+        /// </summary>
+        /// <param name="promptMessage">The prompt message displayed to the user.</param>
+        /// <returns>The input number.</returns>
+        int AcquireNumericInput(string promptMessage);
     }
 }

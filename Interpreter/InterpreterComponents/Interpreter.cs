@@ -96,12 +96,15 @@ namespace Interpreter
             int row = 0;
             int column = 0;
 
+            code = code.Replace("\r", string.Empty);
+
             foreach (var item in code)
             {
-                this.Torus.TorusContent[column, row] = item;
+                // Only write current item into torus if it is not a new line feed.
+                this.Torus.TorusContent[column, row] = item == '\n' ? ' ' : item;
                 column++;
 
-                if (column == this.Torus.Width - 1)
+                if (column == this.Torus.Width - 1 || item == '\n')
                 {
                     column = 0;
                     row++;

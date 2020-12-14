@@ -24,11 +24,12 @@ namespace Interpreter.LanguageCommands.CalculationCommands
 
         public void Execute()
         {
-            if (this.stack.Count < 2)
-                throw new CommandExecutionFailedException("Could not execute addition command, as the stack did not have enough values pushed.");
+            long first;
+            long second;
 
-            var first = this.stack.Pop();
-            var second = this.stack.Pop();
+            this.stack.TryPop(out first);
+            this.stack.TryPop(out second);
+
             this.stack.Push(first + second);
         }
     }

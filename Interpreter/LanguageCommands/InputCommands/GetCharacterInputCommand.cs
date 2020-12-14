@@ -25,7 +25,7 @@ namespace Interpreter.LanguageCommands.InputCommands
 
         public void Execute()
         {
-            var input = this.inputHandler.AcquireInput("Please enter a character into the console.");
+            var input = this.inputHandler.AcquireCharacterInput("Please enter a character into the console.");
 
             this.stack.Push(input);
         }

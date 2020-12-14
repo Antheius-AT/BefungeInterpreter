@@ -25,14 +25,9 @@ namespace Interpreter.LanguageCommands.InputCommands
 
         public void Execute()
         {
-            char input;
+            int input;
 
-            do
-            {
-                input = this.inputHandler.AcquireInput("Please enter a single digit number");
-            }
-            while (!char.IsDigit(input));
-
+            input = this.inputHandler.AcquireNumericInput("Please enter an integer number");
             this.stack.Push(input);
         }
     }
