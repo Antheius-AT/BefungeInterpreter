@@ -20,6 +20,7 @@ namespace Interpreter
                 throw new NotImplementedException("Arguments were valid, however interactive mode is not implemented in this version, and is yet to come.");
             else if (args.Length == 2 && args[0].ToLower() == "--noninteractive")
             {
+                var test = Environment.CommandLine;
                 var host = CreateHostBuilder(args).Build();
                 var interpreter = host.Services.GetRequiredService<BefungeInterpreter>();
 
@@ -44,7 +45,7 @@ namespace Interpreter
                     services.AddSingleton<IOutputHandler, ConsoleOutputHandler>();
                     services.AddTransient<ExecutableCodeContainer>(factory =>
                     {
-                        return new ExecutableCodeContainer(File.ReadAllText("input.txt"));
+                        return new ExecutableCodeContainer(args[1]);
                     });
                     services.AddSingleton<ICommandParser, DefaultCommandParser>();
                     services.AddTransient<BefungeInterpreter>();

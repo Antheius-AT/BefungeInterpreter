@@ -97,6 +97,7 @@ namespace Interpreter
             int row = 0;
             int column = 0;
 
+            code = code.Replace("\\r\\n", "\r\n");
             code = code.Replace("\r", string.Empty);
 
             foreach (var item in code)

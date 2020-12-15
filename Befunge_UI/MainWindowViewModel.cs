@@ -22,6 +22,7 @@ namespace Befunge_UI
         public MainWindowViewModel()
         {
             this.PathToInterpreter = "undefined";
+            this.ProgramContent = "\"dlroW olleH\" v    _  @\r\n              > ,: ^";
         }
 
         public string ProgramContent
@@ -33,16 +34,18 @@ namespace Befunge_UI
 
             set
             {
-                string transformed = value;
+                //string transformed = value;
 
-                var indexes = transformed.AllIndexesOf('"');
+                //var indexes = transformed.AllIndexesOf('"');
 
-                for (int i = 0; i < indexes.Count; i++)
-                {
-                    transformed = transformed.Insert(indexes[i] + i, "\\");
-                }
+                //for (int i = 0; i < indexes.Count; i++)
+                //{
+                //    transformed = transformed.Insert(indexes[i] + i, "\\");
+                //}
 
-                this.programContent = transformed;
+                //this.programContent = transformed;
+
+                this.programContent = value;
             }
         }
 
@@ -88,16 +91,22 @@ namespace Befunge_UI
             {
                 return new RelayCommand(async p =>
                 {
-                    //var testInfo = new ProcessStartInfo("CMD.exe", $"\"{this.path} --noninteractive\"");
-                    string argumentString = $"--noninteractive \"{this.ProgramContent}\"";
+                    string argumentString = $@"--noninteractive ""{this.ProgramContent}""";
                     File.WriteAllText("test.txt", this.ProgramContent);
                     var info = new ProcessStartInfo(this.path, argumentString);
                     info.UseShellExecute = true;
-                    info.ErrorDialog = true;
+                    info.ErrorDialog = false;
                     info.CreateNoWindow = true;
-                    
-                    var process = Process.Start(info);
-                    await this.WaitForProcessExit(process);
+
+                    try
+                    {
+                        var process = Process.Start(info);
+                        await this.WaitForProcessExit(process);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show($"Process could not be started. The following error occurred: {e.Message}");
+                    }
                 },
                 p => true);
             }
