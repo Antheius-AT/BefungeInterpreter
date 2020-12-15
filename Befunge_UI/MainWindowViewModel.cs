@@ -22,7 +22,7 @@ namespace Befunge_UI
         public MainWindowViewModel()
         {
             this.PathToInterpreter = "undefined";
-            this.ProgramContent = "\"dlroW olleH\" v    _  @\r\n              > ,: ^";
+            this.ProgramContent = "\\\"dlroW olleH\\\" v    _  @\r\n              > ,: ^";
         }
 
         public string ProgramContent
@@ -92,11 +92,7 @@ namespace Befunge_UI
                 return new RelayCommand(async p =>
                 {
                     string argumentString = $@"--noninteractive ""{this.ProgramContent}""";
-                    File.WriteAllText("test.txt", this.ProgramContent);
                     var info = new ProcessStartInfo(this.path, argumentString);
-                    info.UseShellExecute = true;
-                    info.ErrorDialog = false;
-                    info.CreateNoWindow = true;
 
                     try
                     {
@@ -145,7 +141,8 @@ namespace Befunge_UI
         {
             var task = new Task(() =>
             {
-                process.WaitForExit();
+                if (!process.HasExited)
+                    process.WaitForExit();
             });
 
             task.Start();

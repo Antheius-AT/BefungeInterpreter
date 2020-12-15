@@ -20,11 +20,12 @@ namespace Interpreter
                 throw new NotImplementedException("Arguments were valid, however interactive mode is not implemented in this version, and is yet to come.");
             else if (args.Length == 2 && args[0].ToLower() == "--noninteractive")
             {
-                var test = Environment.CommandLine;
                 var host = CreateHostBuilder(args).Build();
                 var interpreter = host.Services.GetRequiredService<BefungeInterpreter>();
 
                 interpreter.Start();
+                Console.Write("Interpreter stopped..\nConfirm with key press.");
+                Console.ReadKey(true);
             }
             else
                 throw new ArgumentException(nameof(args), "Invalid argument specified");
