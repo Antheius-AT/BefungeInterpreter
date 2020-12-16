@@ -22,30 +22,28 @@ namespace Befunge_UI
         public MainWindowViewModel()
         {
             this.PathToInterpreter = "undefined";
-            this.ProgramContent = "\\\"dlroW olleH\\\" v    _  @\r\n              > ,: ^";
+            this.ProgramContent = "523+\"!resu raed ,olleH\" v ####_ :: . \"+\" ,. \"=\",+. \"dne ot yek sserP\" v\r\n                        >  ,: ^                                             ,\r\n                                                                               ,\r\n                                                                  @~,,,,,,,,,,,<";
         }
 
         public string ProgramContent
         {
             get
             {
-                return this.programContent;
+                return this.programContent.Replace(@"\""", "\"");
             }
 
             set
             {
-                //string transformed = value;
+                string transformed = value;
 
-                //var indexes = transformed.AllIndexesOf('"');
+                var indexes = transformed.AllIndexesOf('"');
 
-                //for (int i = 0; i < indexes.Count; i++)
-                //{
-                //    transformed = transformed.Insert(indexes[i] + i, "\\");
-                //}
+                for (int i = 0; i < indexes.Count; i++)
+                {
+                    transformed = transformed.Insert(indexes[i] + i, "\\");
+                }
 
-                //this.programContent = transformed;
-
-                this.programContent = value;
+                this.programContent = transformed;
             }
         }
 
@@ -91,7 +89,7 @@ namespace Befunge_UI
             {
                 return new RelayCommand(async p =>
                 {
-                    string argumentString = $@"--noninteractive ""{this.ProgramContent}""";
+                    string argumentString = $@"--noninteractive ""{this.programContent}""";
                     var info = new ProcessStartInfo(this.path, argumentString);
 
                     try

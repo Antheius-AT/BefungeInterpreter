@@ -9,6 +9,7 @@ namespace Interpreter.InterpreterComponents
     using System;
     using System.Collections.Generic;
     using Interfaces;
+    using AdditionalComponents;
     using LanguageCommands.LogicalCommands;
     using LanguageCommands.CalculationCommands;
     using LanguageCommands.DirectionCommands;
@@ -60,7 +61,9 @@ namespace Interpreter.InterpreterComponents
                 {'@', new EndExecutionCommand(pointer) },
                 {' ', new NullCommand() },
                 {'\0', new NullCommand() },
-                {'\r', new NullCommand() }
+                {'\r', new NullCommand() },
+                {'i', new ToggleOutputModeCommand(outputHandler, OutputMode.InLine) },
+                {'n', new ToggleOutputModeCommand(outputHandler, OutputMode.NewLine) }
            };
         }
 
