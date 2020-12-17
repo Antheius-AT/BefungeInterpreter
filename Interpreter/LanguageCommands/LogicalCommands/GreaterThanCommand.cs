@@ -11,7 +11,7 @@ namespace Interpreter.LanguageCommands.LogicalCommands
 
     /// <summary>
     /// Represents a command that pops 2 values from the stack and pushes 1 or 0 to the stack
-    /// depending on whether value 1 is greater value 2.
+    /// depending on whether value 1 is greater than value 2.
     /// </summary>
     public class GreaterThanCommand : ICommand
     {
@@ -30,7 +30,7 @@ namespace Interpreter.LanguageCommands.LogicalCommands
             this.stack.TryPop(out first);
             this.stack.TryPop(out second);
 
-            if (first > second)
+            if (second > first)
                 this.stack.Push(1);
             else
                 this.stack.Push(0);

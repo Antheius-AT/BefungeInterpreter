@@ -55,7 +55,7 @@ namespace Interpreter.AdditionalComponents
             switch (this.CurrentOutputMode)
             {
                 case OutputMode.InLine:
-                    Console.Write((int)output);
+                    Console.Write($"{(int)output} ");
                     break;
                 case OutputMode.NewLine:
                     Console.WriteLine((int)output);

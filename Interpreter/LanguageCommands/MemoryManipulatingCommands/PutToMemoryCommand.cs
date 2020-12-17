@@ -35,7 +35,10 @@ namespace Interpreter.LanguageCommands.MemoryManipulatingCommands
             this.stack.TryPop(out x);
             this.stack.TryPop(out value);
 
-            if (x > this.torus.Width - 1 || y > this.torus.Height - 1)
+            bool isLeftOutofBounds = x < 0 || x > this.torus.Width - 1;
+            bool isRightOutofBounds = y < 0 || y > this.torus.Height - 1;
+
+            if (isLeftOutofBounds || isRightOutofBounds)
                 throw new CommandExecutionFailedException($"Could not execute put command to modify code as the coordinates were out of bounds. Coordinates as popped from the stack where: ({x}|{y})");
             else
                 this.torus.TorusContent[x, y] = (char)value;

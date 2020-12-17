@@ -31,6 +31,9 @@ namespace Interpreter.LanguageCommands.CalculationCommands
             this.stack.TryPop(out first);
             this.stack.TryPop(out second);
 
+            if (first == 0)
+                throw new CommandExecutionFailedException("Could not invoke division command, as it is impossible to divide by zero");
+
             this.stack.Push((long)Math.Floor((second * 1.0 / first)));
         }
     }

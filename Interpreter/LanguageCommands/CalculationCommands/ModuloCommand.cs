@@ -30,6 +30,10 @@ namespace Interpreter.LanguageCommands.CalculationCommands
             this.stack.TryPop(out first);
             this.stack.TryPop(out second);
 
+            if (first == 0)
+                throw new CommandExecutionFailedException("Could not invoke modulo command, as it is impossible to divide by zero");
+
+            // second is element that was pushed first onto the stack, due to the stacks LIFO nature.
             this.stack.Push(second % first);
         }
     }

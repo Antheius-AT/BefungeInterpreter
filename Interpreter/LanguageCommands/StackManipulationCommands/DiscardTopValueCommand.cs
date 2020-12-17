@@ -23,7 +23,7 @@ namespace Interpreter.LanguageCommands.StackManipulationCommands
 
         public void Execute()
         {
-            if (this.stack.Count > 1)
+            if (this.stack.Count > 0)
                 this.stack.Pop();
         }
     }

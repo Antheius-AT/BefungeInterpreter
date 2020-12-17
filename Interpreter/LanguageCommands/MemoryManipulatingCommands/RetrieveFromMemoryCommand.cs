@@ -8,6 +8,7 @@ namespace Interpreter.LanguageCommands.MemoryManipulatingCommands
 {
     using System.Collections.Generic;
     using Interfaces;
+    using Interpreter.Exceptions;
 
     /// <summary>
     /// Retrieves a value at a position specified by the two upper most stack values (serving as X and Y) and pushes
@@ -32,8 +33,11 @@ namespace Interpreter.LanguageCommands.MemoryManipulatingCommands
             this.stack.TryPop(out y);
             this.stack.TryPop(out x);
 
-            if (x > this.torus.Width - 1 || y > this.torus.Height - 1)
-                this.stack.Push(0);
+            bool isLeftOutofBounds = x < 0 || x > this.torus.Width - 1;
+            bool isRightOutofBounds = y < 0 || y > this.torus.Height - 1;
+
+            if (isLeftOutofBounds || isRightOutofBounds)
+                throw new CommandExecutionFailedException($"could not invoke retrieve from memory command, as specified coordinates were out of bounds. Coordinates were: ({x}|{y})");
             else
                 this.stack.Push(this.torus.TorusContent[x, y]);
         }

@@ -4,22 +4,14 @@ using System.Text;
 using Interpreter;
 using Interpreter.Interfaces;
 using Interpreter.LanguageCommands.BasicCommands;
-using Interpreter.LanguageCommands.CalculationCommands;
-using Interpreter.LanguageCommands.DecisionMakingCommands;
-using Interpreter.LanguageCommands.DirectionCommands;
-using Interpreter.LanguageCommands.InputCommands;
-using Interpreter.LanguageCommands.LogicalCommands;
-using Interpreter.LanguageCommands.MemoryManipulatingCommands;
-using Interpreter.LanguageCommands.OutputCommands;
-using Interpreter.LanguageCommands.StackManipulationCommands;
-using Interpreter.Enumerations;
 using NUnit.Framework;
 using Interpreter.AdditionalComponents;
 using Interpreter.InterpreterComponents;
+using Interpreter.Exceptions;
 
 namespace Interpreter_Tests
 {
-    public class CommandTests
+    public class BasicCommandTests
     {
         private Torus torus;
         private ProgramCounter pointer;
@@ -115,40 +107,18 @@ namespace Interpreter_Tests
         }
 
         [Test]
-        [TestCase(5,2)]
-        [TestCase(10, 33)]
-        [TestCase(0, 0)]
-        public void DoesCommandExecuteCorrectly_AdditionCommand(long first, long second)
+        public void DoesCommandExecuteCorrectly_ToggleStringMode_InCommandParser()
         {
-            this.stack.Push(first);
-            this.stack.Push(second);
+            var initial = this.parser.IsStringmodeToggled;
 
-            var command = new AdditionCommand(this.stack);
-            command.Execute();
+            this.parser.ToggleStringMode();
 
-            this.stack.TryPop(out long result);
+            if (this.parser.IsStringmodeToggled == initial)
+                Assert.Fail();
 
-            Assert.That(result == first + second);
-        }
+            this.parser.ToggleStringMode();
 
-        [Test]
-        [TestCase(10, 5)]
-        [TestCase(6, 4)]
-        [TestCase(1, 20)]
-        [TestCase(35, 0)]
-        [TestCase(0, 22)]
-        public void DoesCommandExecuteCorrectly_DivisionCommand(long first, long second)
-        {
-            this.stack.Push(first);
-            this.stack.Push(second);
-
-            var command = new DivisionCommand(this.stack);
-
-            command.Execute();
-
-            this.stack.TryPop(out long result);
-
-            Assert.That(Math.Floor(first * 1.0 / second) == result);
+            Assert.True(this.parser.IsStringmodeToggled == initial);
         }
     }
 }
