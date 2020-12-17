@@ -49,17 +49,17 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="LightBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Border BorderBrush="Black" BorderThickness="2">
-            <TextBox Background="LightBlue" AcceptsReturn="True" Text="{Binding ProgramContent}" TextWrapping="Wrap" FontSize="20" FontFamily="Courier New" Width="970" MaxWidth="970" MaxLines="25" MaxLength="2000" MaxHeight="700"/>
+            <TextBox Background="White" AcceptsReturn="True" Text="{Binding ProgramContent}" TextWrapping="Wrap" FontSize="20" FontFamily="Courier New" Width="970" MaxWidth="970" MaxLines="25" MaxLength="2000" MaxHeight="700"/>
         </Border>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-            <Button Content="Load" Command="{Binding LoadInputCommand}"/>
+            <Button Content="Load" Command="{Binding LoadInputCommand}" Background="Gray"/>
             <Button Content="Run" Command="{Binding RunCodeCommand}"/>
             <Button Content="Specify Interpreter" Command="{Binding SpecifyInterpreterCommand}"/>
             <TextBlock Margin="10" Text="Pfad zum Interpreter: "/>

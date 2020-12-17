@@ -22,7 +22,7 @@ namespace Befunge_UI
         public MainWindowViewModel()
         {
             this.PathToInterpreter = "undefined";
-            this.ProgramContent = "523+\"!resu raed ,olleH\" v ####_ :: . \"+\" ,. \"=\",+. \"dne ot yek sserP\" v\r\n                        >  ,: ^                                             ,\r\n                                                                               ,\r\n                                                                  @~,,,,,,,,,,,<";
+            this.ProgramContent = "\"***reterpretni ym ot emocleW***\"      v\r\nSimple interpreter by Gregor Faiman.\r\n@,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,      <";
         }
 
         public string ProgramContent
@@ -55,7 +55,7 @@ namespace Befunge_UI
                 {
                     throw new NotImplementedException();
                 },
-                p => true);
+                p => false);
             }
         }
 

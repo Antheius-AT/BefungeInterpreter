@@ -16,7 +16,7 @@ namespace Interpreter.AdditionalComponents
     {
         public ConsoleOutputHandler()
         {
-            this.CurrentOutputMode = OutputMode.NewLine;
+            this.CurrentOutputMode = OutputMode.InLine;
         }
 
         /// <summary>
